@@ -18,7 +18,7 @@
             <visual>  
                 <geometry>  
                     <!--box size=".04 .04 .05"/-->
-                    <mesh filename="package://tinker_description/src/meshes/hokuyo.dae"/> 
+                    <mesh filename="package://tinker_description/meshes/hokuyo.dae"/> 
                 </geometry>  
             </visual>  
             <collision>  

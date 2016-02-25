@@ -55,4 +55,5 @@
   <xacro:hokuyo_lx30_laser_v0 name="base_laser" parent="base" ros_topic="base_scan" update_rate="20" min_angle="${-PI/2}" max_angle="${PI/2}" >
       <origin xyz="${base_laser_x} ${base_laser_y} ${base_laser_z}" rpy="0 0 0" />
   </xacro:hokuyo_lx30_laser_v0>
+
 </robot>
