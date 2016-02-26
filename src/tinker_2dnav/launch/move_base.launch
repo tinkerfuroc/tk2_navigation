@@ -17,11 +17,10 @@
     <arg name="map_file" default="$(find tinker_2dnav)/map/map.yaml"/>
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
 
-    <node name="rviz" pkg="rviz" type="rviz"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz"/>
 
     <!--- Run AMCL -->
-    <include file="$(find amcl)/examples/amcl_omni.launch">
-    </include>
+    <include file="$(find amcl)/examples/amcl_omni.launch"/>
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <param name="controller_frequency" value="4.0" />
