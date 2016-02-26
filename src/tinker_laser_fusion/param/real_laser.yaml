@@ -1,0 +1,11 @@
+front_laser:
+  x: 0.22
+  y: -0.18
+  theta: -0.7853981633974483
+  topic: /front_scan 
+
+side_laser:
+  x: 0.14
+  y: 0.2
+  theta: 1.5707963267948966
+  topic: /side_scan

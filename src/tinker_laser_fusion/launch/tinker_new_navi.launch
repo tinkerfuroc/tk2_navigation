@@ -1,0 +1,58 @@
+<launch>
+  <arg name="model" default="$(find tinker_gazebo)/src/urdf/tinker.urdf"/>
+  <arg name="gui" default="False" />
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+  <param name="use_gui" value="$(arg gui)" />
+
+  <!-- Tinker_model -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+  <!-- Laser -->
+  <node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" >
+    <param name="sensor_param" value="param_value" />
+  </node>
+  
+ <!--node name="rosbag" pkg="rosbag" type="record" args="/move_base/GlobalPlanner/plan /move_base/DWAPlannerROS/local_plan /tf /odom //move_base/goal /initialpose " /-->
+    
+
+  <!-- RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_gazebo)/src/launch/tinker_navigation.rviz" />
+
+    <!--node pkg="d_firmware" type="fw_send_service.py" name="fw" output="screen">
+    </node-->
+
+    <!--node pkg="com_firmware" type="com_zynq.py" name="com" output="screen">
+    </node-->
+
+    <!--node pkg="tinker_tf" type="tf_broadcaster.py" name="tinker_tf" >
+    <param name="transform_configuration_param" value="param_value" />
+    </node-->
+
+
+
+    <master auto="start"/>
+
+    <!-- Run the map server -->
+    <arg name="map_file" default="$(find tinker_gazebo)/src/map/1_3floor.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+    <!--- Run AMCL -->
+    <arg name="scantopic" default="scan"/>
+    <include file="$(find amcl)/examples/amcl_omni.launch" />
+    <arg name="scan_topic" value="$(arg scantopic)"/>
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="controller_frequency" value="4.0" />
+    <param name="planner_frequency" value="0.1" />
+    <param name="planner_patience" value="20.0" />
+    <param name="base_global_planner" value="navfn/NavfnROS" />
+    <rosparam file="$(find nv_2dnav)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find nv_2dnav)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find nv_2dnav)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find nv_2dnav)/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find nv_2dnav)/base_local_planner_params.yaml" command="load" />
+   </node>
+
+   
+</launch>
