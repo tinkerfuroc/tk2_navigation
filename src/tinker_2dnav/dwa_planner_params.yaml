@@ -1,16 +1,17 @@
 DWAPlannerROS:
     max_vel_x: 0.05  
-    min_vel_x: 0.02  
-    max_vel_y: 0
-    min_vel_y: 0
+    min_vel_x: -0.01  
+    max_vel_y: 0.02
+    min_vel_y: -0.02
     max_rot_vel: 0.13
     min_rot_vel: 0.0
 
     prune_plan: true
 
-    vx_samples: 3
+    sim_time: 3.0
+    vx_samples: 10
     yaw_goal_tolerance: 0.2
     xy_goal_tolerance: 0.1
 
-    occdist_scale: 24.0
-    penalize_negative_x: true
+    occdist_scale: 5.0
+    penalize_negative_x: false
