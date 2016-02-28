@@ -8,7 +8,7 @@ from sensor_msgs.msg import LaserScan
 from numpy import nan
 from threading import Thread
 
-RATE = 20.
+RATE = 40.
 
 def checker(fake_laser_param, laser_scanners):
     r = rospy.Rate(RATE)

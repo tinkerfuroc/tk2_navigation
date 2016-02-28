@@ -8,39 +8,15 @@
         <param name="use_gui" value="FALSE"/>
     </node>
 
-    <node name="hokuyo_front" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
-        <remap from="/scan" to="/front_scan"/>
-        <!--param name="frame_id" value="/base_laser_link"/--> 
-        <param name="calibrate_time" type="bool" value="false"/> 
-        <param name="port" type="string" value="/dev/ttyACM0"/> 
-        <param name="intensity" type="bool" value="false"/>
-        <param name="min_ang" type="double" value="-2.268"/>
-        <param name="max_ang" type="double" value="2.268"/>
-    </node>
-    <node name="hokuyo_side" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
-        <remap from="/scan" to="/side_scan"/>
-        <param name="calibrate_time" type="bool" value="false"/> 
-        <param name="port" type="string" value="/dev/ttyACM1"/> 
-        <param name="intensity" type="bool" value="false"/>
-    </node>
-
-    <node name="runfusion" type="runfusion.py" pkg="tinker_laser_fusion" output="screen">
-        <param name="real_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/real_laser.yaml"/>
-        <param name="fake_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/fake_laser.yaml"/>
-    </node>
-
-
     <!-- Combine joint values -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
 
 
     <!-- Run the map server -->
-    <arg name="map_file" default="$(find tinker_2dnav)/map/1_3floor.yaml"/>
+    <arg name="map_file" default="$(find tinker_2dnav)/map/map.yaml"/>
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
 
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz">
-        <remap from="/cmd_vel" to="/do_nothing"/>
-    </node>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz"/>
 
     <!--- Run AMCL -->
     <include file="$(find amcl)/examples/amcl_omni.launch"/>

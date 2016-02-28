@@ -43,9 +43,9 @@ def getKey():
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-V_X = 0.12
-V_Y = 0.12
-V_A = 0.24
+V_X = 0.06
+V_Y = 0.06
+V_A = 0.1
 
 RATE = 10.0
 
