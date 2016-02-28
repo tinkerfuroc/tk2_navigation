@@ -8,8 +8,8 @@ local_costmap:
     width: 6.0
     height: 6.0
     resolution: 0.01
-    inscribed_radius: 0.2
-    circumscribed_radius: 0.35
+    inscribed_radius: 0.15
+    circumscribed_radius: 0.3
 
     inflation_layer:
         cost_scaling_factor: 1.0
