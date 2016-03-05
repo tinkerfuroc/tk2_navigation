@@ -29,6 +29,8 @@
         <param name="fake_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/fake_laser.yaml"/>
     </node>
 
+    <node name="tinker_laser_human_tracker" type ="laser_human_tracker_node" pkg="tinker_human_track" output="screen" />
+
 
     <!-- Combine joint values -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>

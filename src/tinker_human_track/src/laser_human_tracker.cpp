@@ -15,15 +15,15 @@ LaserHumanTracker::LaserHumanTracker()
     :seq_(0), debug_seq_(0) {
     ros::NodeHandle private_nh("~/");
     private_nh.param("frame_id", frame_id_, string("base_laser_link"));
-    private_nh.param("same_segment_distance", same_segment_distance_, 0.1);
-    private_nh.param("min_segment_size", min_segment_size_, 15.0);
+    private_nh.param("same_segment_distance", same_segment_distance_, 0.05);
+    private_nh.param("min_segment_size", min_segment_size_, 8.0);
     private_nh.param("max_segment_size", max_segment_size_, 80.0);
     private_nh.param("min_segment_distance", min_segment_distance_, 0.05);
-    private_nh.param("max_segment_distance", max_segment_distance_, 0.4);
-    private_nh.param("min_toward_weight", min_toward_weight_, 0.8);
-    private_nh.param("min_inscribe_angle", min_inscribe_angle_, 0.5);
+    private_nh.param("max_segment_distance", max_segment_distance_, 0.25);
+    private_nh.param("min_toward_weight", min_toward_weight_, 0.7);
+    private_nh.param("min_inscribe_angle", min_inscribe_angle_, 0.4);
     private_nh.param("max_inscribe_angle", max_inscribe_angle_, 3.0);
-    private_nh.param("max_leg_distance", max_leg_distance_, 0.5);
+    private_nh.param("max_leg_distance", max_leg_distance_, 0.7);
     people_pub_ = private_nh.advertise<people_msgs::People>("laser_found_people", 1);
     debug_pub_ = private_nh.advertise<sensor_msgs::PointCloud>("debug_point_cloud", 1);
 }
@@ -50,8 +50,8 @@ void LaserHumanTracker::LaserDataHandler(const sensor_msgs::LaserScan::ConstPtr 
         //ROS_INFO("found leg: center %f %f", leg_points.back().x, leg_points.back().y);
     }
     vector<Point> human_points = GetHumanPoints(leg_points);
-    PublishHumanPoints(human_points);
     PublishSegment(human_points);
+    PublishHumanPoints(human_points);
     //PublishHumanPoints(leg_points);
     //ROS_INFO("==========================");
 }
