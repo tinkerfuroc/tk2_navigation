@@ -1,7 +1,6 @@
 #include <tinker_human_track/laser_human_tracker.h>
 #include <ros/ros.h>
 #include <people_msgs/Person.h>
-#include <geometry_msgs/PointStamped.h>
 #include <sensor_msgs/PointCloud.h>
 #include <boost/foreach.hpp>
 #include <math.h>
@@ -25,8 +24,8 @@ LaserHumanTracker::LaserHumanTracker()
     private_nh.param("min_inscribe_angle", min_inscribe_angle_, 0.5);
     private_nh.param("max_inscribe_angle", max_inscribe_angle_, 3.0);
     private_nh.param("max_leg_distance", max_leg_distance_, 0.5);
-    people_pub_ = private_nh.advertise<geometry_msgs::PointStamped>("laser_found_people", 1);
-    point_cloud_pub_ = private_nh.advertise<sensor_msgs::PointCloud>("debug_point_cloud", 1);
+    people_pub_ = private_nh.advertise<people_msgs::People>("laser_found_people", 1);
+    debug_pub_ = private_nh.advertise<sensor_msgs::PointCloud>("debug_point_cloud", 1);
 }
 
 void LaserHumanTracker::LaserDataHandler(const sensor_msgs::LaserScan::ConstPtr & laser_scan) {
@@ -44,14 +43,15 @@ void LaserHumanTracker::LaserDataHandler(const sensor_msgs::LaserScan::ConstPtr 
         }
         now_angle += angle_step;
     }
-    PublishSegment(laser_points);
     vector<vector<Point> > segments = GetSegments(laser_points);
     vector<Point> leg_points;
     BOOST_FOREACH(vector<Point> & segment, segments) {
         leg_points.push_back(GetCenter(segment));
         //ROS_INFO("found leg: center %f %f", leg_points.back().x, leg_points.back().y);
     }
-    PublishHumanPoints(GetHumanPoints(leg_points));
+    vector<Point> human_points = GetHumanPoints(leg_points);
+    PublishHumanPoints(human_points);
+    PublishSegment(human_points);
     //PublishHumanPoints(leg_points);
     //ROS_INFO("==========================");
 }
@@ -138,16 +138,18 @@ double LaserHumanTracker::AvgInscribeAngle(const vector<Point> & segment) {
 }
 
 void LaserHumanTracker::PublishHumanPoints(const vector<Point> & human_points) {
-    geometry_msgs::PointStamped person_point;
-    person_point.header.seq = seq_++;
-    person_point.header.stamp = ros::Time::now();
-    person_point.header.frame_id = frame_id_;
+    people_msgs::People people;
+    people.header.seq = seq_++;
+    people.header.stamp = ros::Time::now();
+    people.header.frame_id = frame_id_;
     BOOST_FOREACH(const Point & point, human_points) {
-        person_point.point.x = point.x;
-        person_point.point.y = point.y;
-        person_point.point.z = 0;
-        people_pub_.publish(person_point);
+        people_msgs::Person person;
+        person.position.x = point.x;
+        person.position.y = point.y;
+        person.position.z = 0;
+        people.people.push_back(person);
     }
+    people_pub_.publish(people);
 }
 
 void LaserHumanTracker::PublishSegment(const vector<Point> & segment) {
@@ -162,7 +164,7 @@ void LaserHumanTracker::PublishSegment(const vector<Point> & segment) {
         point32.z = 0;
         point_cloud.points.push_back(point32);
     }
-    point_cloud_pub_.publish(point_cloud);
+    debug_pub_.publish(point_cloud);
 }
 
 Point LaserHumanTracker::GetCenter(const vector<Point> & segment) {

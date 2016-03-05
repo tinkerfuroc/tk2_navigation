@@ -38,7 +38,7 @@ private:
     double max_inscribe_angle_;
     double max_leg_distance_;
     ros::Publisher people_pub_;    
-    ros::Publisher point_cloud_pub_;
+    ros::Publisher debug_pub_;
 };
 
 }
