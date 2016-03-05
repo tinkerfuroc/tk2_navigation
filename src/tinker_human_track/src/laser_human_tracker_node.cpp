@@ -8,9 +8,10 @@ using std::string;
 
 int main(int argc, char * argv[]) {
     ros::init(argc, argv, "tinker_laser_human_tracker");
-    ros::NodeHandle nh("~/");
+    ros::NodeHandle private_nh("~/");
+    ros::NodeHandle nh("/");
     string laser_topic_name;
-    nh.param("laser_topic_name", laser_topic_name, "scan");
+    private_nh.param("laser_topic_name", laser_topic_name, string("scan"));
     LaserHumanTracker laser_human_tracker;
     ros::Subscriber sub = nh.subscribe(laser_topic_name, 10, &LaserHumanTracker::LaserDataHandler, &laser_human_tracker);
     ROS_INFO("laser tracker initialized");

@@ -6,6 +6,7 @@
 #include <people_msgs/People.h>
 #include <vector>
 #include <string>
+#include <ros/ros.h>
 
 namespace tinker {
 namespace navigation {
@@ -39,3 +40,5 @@ private:
 
 }
 }
+
+#endif

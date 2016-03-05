@@ -4,7 +4,7 @@
 namespace tinker {
 namespace navigation {
 
-sturct Point {
+struct Point {
     double x;
     double y;
 };

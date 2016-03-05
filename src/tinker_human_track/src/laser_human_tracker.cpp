@@ -5,6 +5,7 @@
 #include <math.h>
 
 using std::vector;
+using std::string;
 
 namespace tinker{
 namespace navigation {
@@ -12,15 +13,15 @@ namespace navigation {
 LaserHumanTracker::LaserHumanTracker()
     :seq_(0) {
     ros::NodeHandle private_nh("~/");
-    private_nh.param("frame_id", frame_id_, "base_laser_link");
+    private_nh.param("frame_id", frame_id_, string("base_laser_link"));
     private_nh.param("same_segment_distance", same_segment_distance_, 0.1);
-    private_nh.param("min_segment_size", min_segment_size_, 15);
-    private_nh.param("max_segment_size", max_segment_size_, 80);
+    private_nh.param("min_segment_size", min_segment_size_, 15.0);
+    private_nh.param("max_segment_size", max_segment_size_, 80.0);
     private_nh.param("min_segment_distance", min_segment_distance_, 0.05);
     private_nh.param("max_segment_distance", max_segment_distance_, 0.4);
     private_nh.param("min_toward_weight", min_toward_weight_, 0.8);
     private_nh.param("min_inscribe_angle", min_inscribe_angle_, 0.5);
-    private_nh.param("max_inscribe_angle", max_inscribe_angle_, 3);
+    private_nh.param("max_inscribe_angle", max_inscribe_angle_, 3.0);
     private_nh.param("max_leg_distance", max_leg_distance_, 0.5);
     people_pub_ = private_nh.advertise<people_msgs::People>("laser_found_people", 1);
 }
@@ -37,20 +38,24 @@ void LaserHumanTracker::LaserDataHandler(const sensor_msgs::LaserScan::ConstPtr 
             .y = radius * sin(now_angle)
         };
         laser_points.push_back(point);
+        now_angle += angle_step;
     }
     vector<vector<Point> > segments = GetSegments(laser_points);
     vector<Point> leg_points;
     BOOST_FOREACH(vector<Point> & segment, segments) {
         leg_points.push_back(GetCenter(segment));
+        ROS_INFO("found leg: center %f %f", leg_points.back().x, leg_points.back().y);
     }
-    PublishHumanPoints(GetHumanPoints(leg_points));
+    //PublishHumanPoints(GetHumanPoints(leg_points));
+    PublishHumanPoints(leg_points);
+    ROS_INFO("==========================");
 }
 
 vector<vector<Point> > LaserHumanTracker::GetSegments(const std::vector<Point> & laser_points) {
     Point last_point;
     bool is_in_segment = false;
     vector<Point> now_segment;
-    vector<vector<Point>> segments;
+    vector<vector<Point> > segments;
     BOOST_FOREACH(Point point, laser_points) {
         if (!is_in_segment) {
             now_segment.push_back(point);
@@ -61,7 +66,7 @@ vector<vector<Point> > LaserHumanTracker::GetSegments(const std::vector<Point> &
                 now_segment.push_back(point);
             }
             else{
-                if(is_valid_segment(now_segment)) {
+                if(IsValidSegment(now_segment)) {
                     segments.push_back(now_segment);
                 }
                 now_segment.clear();
@@ -70,8 +75,8 @@ vector<vector<Point> > LaserHumanTracker::GetSegments(const std::vector<Point> &
         }
         last_point = point;
     }
+    return segments;
 }
-return segments;
 
 vector<Point> LaserHumanTracker::GetHumanPoints(const vector<Point> & leg_points) {
     vector<Point> human_points;
@@ -133,9 +138,9 @@ void LaserHumanTracker::PublishHumanPoints(const vector<Point> & human_points) {
     people.header.stamp = ros::Time::now();
     people.header.frame_id = frame_id_;
     BOOST_FOREACH(const Point & point, human_points) {
-        people::Person person;
-        person.position.x = position.x;
-        person.position.y = position.y;
+        people_msgs::Person person;
+        person.position.x = point.x;
+        person.position.y = point.y;
         person.position.z = 0;
         people.people.push_back(person);
     }
