@@ -23,8 +23,10 @@ private:
     double AvgInscribeAngle(const std::vector<Point> & segment);
     void PublishHumanPoints(const std::vector<Point> & human_points);
     Point GetCenter(const std::vector<Point> & segment);
+    void PublishSegment(const std::vector<Point> & segment);
 
     int seq_;
+    int debug_seq_;
     std::string frame_id_;
     double same_segment_distance_;
     double min_segment_size_;
@@ -36,6 +38,7 @@ private:
     double max_inscribe_angle_;
     double max_leg_distance_;
     ros::Publisher people_pub_;    
+    ros::Publisher point_cloud_pub_;
 };
 
 }
