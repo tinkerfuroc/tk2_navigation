@@ -12,6 +12,7 @@ from threading import Lock
 pub = rospy.Publisher('move_base_simple/goal', PoseStamped, queue_size=10)
 seq = 0
 l = Lock()
+now_target = None
 pose = None
 def found_people_handler(people):
     global seq, pose, l

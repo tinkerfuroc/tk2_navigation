@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   geometry_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -131,12 +132,14 @@ include_directories(
 # add_dependencies(tinker_human_track ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 set(SRC_FILE 
+    src/nearest_neighbour_follower.cpp
     src/laser_human_tracker.cpp
     src/utilities.cpp
 )
 
 ## Declare a C++ executable
 add_executable(laser_human_tracker_node src/laser_human_tracker_node.cpp ${SRC_FILE})
+add_executable(nearest_neighbour_follower_node src/nearest_neighbour_follower_node.cpp ${SRC_FILE})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -144,6 +147,9 @@ add_executable(laser_human_tracker_node src/laser_human_tracker_node.cpp ${SRC_F
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(laser_human_tracker_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(nearest_neighbour_follower_node
   ${catkin_LIBRARIES}
 )
 
