@@ -1,0 +1,64 @@
+<launch>
+
+    <param name="robot_description"
+        command="$(find xacro)/xacro.py '$(find tinker_description)/urdf/base/base.urdf.xacro'" />
+
+    <!-- send fake joint values -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <param name="use_gui" value="FALSE"/>
+    </node>
+
+    <node name="hokuyo_front" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
+        <remap from="/scan" to="/front_scan"/>
+        <!--param name="frame_id" value="/base_laser_link"/--> 
+        <param name="calibrate_time" type="bool" value="false"/> 
+        <param name="port" type="string" value="/dev/ttyACM0"/> 
+        <param name="intensity" type="bool" value="false"/>
+        <param name="min_ang" type="double" value="-2.268"/>
+        <param name="max_ang" type="double" value="2.268"/>
+    </node>
+    <node name="hokuyo_side" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
+        <remap from="/scan" to="/side_scan"/>
+        <param name="calibrate_time" type="bool" value="false"/> 
+        <param name="port" type="string" value="/dev/ttyACM1"/> 
+        <param name="intensity" type="bool" value="false"/>
+    </node>
+
+    <node name="runfusion" type="runfusion.py" pkg="tinker_laser_fusion" output="screen">
+        <param name="real_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/real_laser.yaml"/>
+        <param name="fake_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/fake_laser.yaml"/>
+    </node>
+
+    <node name="tinker_laser_human_tracker" type ="laser_human_tracker_node" pkg="tinker_human_track" output="screen" />
+
+
+    <!-- Combine joint values -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+
+
+    <!-- Run the map server -->
+    <arg name="map_file" default="$(find tinker_2dnav)/map/1_3floor.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz">
+        <remap from="/cmd_vel" to="/do_nothing"/>
+    </node>
+
+    <!--- Run AMCL -->
+    <include file="$(find amcl)/examples/amcl_omni.launch"/>
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <param name="controller_frequency" value="10.0" />
+        <!-- param name="planner_frequency" value="0.1" / -->
+        <param name="planner_patience" value="20.0" />
+        <!-- param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS"/ -->
+        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+        <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+        <rosparam file="$(find tinker_2dnav)/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find tinker_2dnav)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find tinker_2dnav)/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find tinker_2dnav)/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find tinker_2dnav)/dwa_planner_params.yaml" command="load" />
+        <!-- rosparam file="$(find tinker_2dnav)/base_local_planner_params.yaml" command="load" /-->
+    </node>
+</launch>
