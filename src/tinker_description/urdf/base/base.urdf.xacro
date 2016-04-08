@@ -21,6 +21,14 @@
     <xacro:property name="base_laser_y" value="0"/>
     <xacro:property name="base_laser_z" value="0.185"/>
 
+    <xacro:property name="kinect_x" value="0"/>
+    <xacro:property name="kinect_y" value="0.20"/>
+    <xacro:property name="kinect_z" value="1.26"/>
+
+    <xacro:property name="arm_origin_x" value="0.12"/>
+    <xacro:property name="arm_origin_y" value="0"/>
+    <xacro:property name="arm_origin_z" value="0.77"/>
+
     <xacro:property name="wheel_mass" value="1"/>
 
 
@@ -56,4 +64,18 @@
       <origin xyz="${base_laser_x} ${base_laser_y} ${base_laser_z}" rpy="0 0 0" />
   </xacro:hokuyo_lx30_laser_v0>
 
+
+<!--*****************base_to_arm_platform***********************-->
+    <link name="kinect_link" />
+    <link name="arm_link" />
+    <joint name="kinect_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="kinect_link" />
+        <origin xyz="${kinect_x} ${kinect_y} ${kinect_z}" rpy="0 0 0" />
+    </joint>
+    <joint name="arm_origin_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="arm_link" />
+        <origin xyz="${arm_origin_x} ${arm_origin_y} ${arm_origin_z}" rpy="0 0 0" />
+    </joint>
 </robot>
