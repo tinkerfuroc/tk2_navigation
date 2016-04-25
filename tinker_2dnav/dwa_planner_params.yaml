@@ -1,9 +1,9 @@
 DWAPlannerROS:
-    max_vel_x: 0.20
+    max_vel_x: 0.15
     min_vel_x: 0.00
-    max_vel_y: 0.04
-    min_vel_y: -0.04
-    max_rot_vel: 0.15
+    max_vel_y: 0.03
+    min_vel_y: -0.03
+    max_rot_vel: 0.10
     min_rot_vel: 0.0
 
     prune_plan: true
