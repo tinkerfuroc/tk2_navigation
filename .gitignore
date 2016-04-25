@@ -43,3 +43,7 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+*.swp
+.ycm_extra_conf.py
+*.pyc
+

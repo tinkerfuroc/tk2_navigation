@@ -4,7 +4,7 @@
         command="$(find xacro)/xacro.py '$(find tinker_description)/urdf/base/base.urdf.xacro'" />
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
 
-    <arg name="map_file" default="$(find tinker_2dnav)/map/1_3floor.yaml"/>
+    <arg name="map_file" default="$(find tinker_2dnav)/map/thu105.yaml"/>
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
 
     <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
