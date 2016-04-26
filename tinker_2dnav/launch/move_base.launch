@@ -1,20 +1,10 @@
 <launch>
 
-    <param name="robot_description"
-        command="$(find xacro)/xacro.py '$(find tinker_description)/urdf/base/base.urdf.xacro'" />
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+    <include file="$(find tinker_description)/launch/tinker_description.launch"/>
+    <include file="$(find tinker_2dnav/launch/hokuyo.launch"/>
 
     <arg name="map_file" default="$(find tinker_2dnav)/map/thu105.yaml"/>
     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
-
-    <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
-        <param name="frame_id" type="string" value="base_laser_link"/> 
-        <param name="calibrate_time" type="bool" value="false"/> 
-        <param name="port" type="string" value="/dev/ttyACM0"/> 
-        <param name="intensity" type="bool" value="false"/>
-        <param name="min_ang" type="double" value="-2.268"/>
-        <param name="max_ang" type="double" value="2.268"/>
-    </node>
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz">
         <remap from="/cmd_vel" to="/do_nothing"/>

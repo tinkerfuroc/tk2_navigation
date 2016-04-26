@@ -1,17 +1,7 @@
 <launch>
-    <param name="robot_description"
-        command="$(find xacro)/xacro.py '$(find tinker_description)/urdf/base/base.urdf.xacro'" />
+    <include file="$(find tinker_description)/launch/tinker_description.launch"/>
+    <include file="$(find tinker_2dnav/launch/hokuyo.launch"/>
 
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
-
-    <node name="hokuyo" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
-        <param name="frame_id" type="string" value="base_laser_link"/> 
-        <param name="calibrate_time" type="bool" value="false"/> 
-        <param name="port" type="string" value="/dev/ttyACM0"/> 
-        <param name="intensity" type="bool" value="false"/>
-        <param name="min_ang" type="double" value="-2.268"/>
-        <param name="max_ang" type="double" value="2.268"/>
-    </node>
     <!--node name="rviz" pkg="rviz" type="rviz"/-->
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     </node>

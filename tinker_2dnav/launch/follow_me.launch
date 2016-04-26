@@ -1,4 +1,5 @@
 <launch>
-    <include file="$(find tinker_2dnav)/launch/move_base.launch"></include>
-    <node name="tinker_laser_human_tracker" type ="laser_human_tracker_node" pkg="tinker_human_track" output="screen" />
+    <include file="$(find tinker_2dnav)/launch/move_base.launch"/>
+    <node name="tinker_laser_human_tracker" type="laser_human_tracker_node"
+          pkg="tinker_human_track" output="screen"/>
 </launch>

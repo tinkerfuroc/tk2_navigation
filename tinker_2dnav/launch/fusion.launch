@@ -1,16 +1,7 @@
 <launch>
-    <param name="robot_description"
-        command="$(find xacro)/xacro.py '$(find tinker_description)/urdf/base/base.urdf.xacro'" />
 
-    <!-- send fake joint values -->
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-        <param name="use_gui" value="FALSE"/>
-    </node>
-
-    <!-- Combine joint values -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
-    <master auto="start"/>
-
+    <include file="$(find tinker_description)/launch/tinker_description.launch"/>
+    <include file="$(find tinker_2dnav/launch/hokuyo.launch"/>
 
     <node name="hokuyo_front" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
         <remap from="/scan" to="/front_scan"/>
