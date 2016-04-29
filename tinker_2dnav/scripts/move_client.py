@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 import rospy
-from tinker_2dnav.msg._SimpleMoveGoal import SimpleMoveGoal
-from tinker_2dnav.msg._SimpleMoveAction import SimpleMoveAction
+from tinker_msgs.msg._SimpleMoveGoal import SimpleMoveGoal
+from tinker_msgs.msg._SimpleMoveAction import SimpleMoveAction
 import actionlib
 import sys
 

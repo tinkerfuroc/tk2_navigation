@@ -58,17 +58,17 @@ find_package(catkin REQUIRED COMPONENTS
 #   Service2.srv
 # )
 
-## Generate actions in the 'action' folder
-add_action_files(
-  FILES
-  SimpleMove.action
-)
-
-## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   std_msgs geometry_msgs actionlib_msgs
- )
+### Generate actions in the 'action' folder
+#add_action_files(
+#  FILES
+#  SimpleMove.action
+#)
+#
+### Generate added messages and services with any dependencies listed here
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs geometry_msgs actionlib_msgs
+# )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -102,8 +102,8 @@ add_action_files(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES tinker_2dnav
-#  CATKIN_DEPENDS move_base
-   DEPENDS system_lib actionlib_msgs
+   CATKIN_DEPENDS move_base actionlib_msgs
+   DEPENDS system_lib 
 )
 
 ###########
