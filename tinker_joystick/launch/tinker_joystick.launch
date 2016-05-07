@@ -1,0 +1,13 @@
+<launch>
+    <node pkg="joy" type="joy_node" name="turtle_joy">
+        <param name="dev" type="string" value="/dev/input/js0"/>
+        <param name="deadzone" value="0.05"/>
+    </node>
+
+    <node pkg="tinker_joystick" type="tinker_joystick" name="tinker_joystick">
+        <param name="scale_x" value="0.2" type="double"/>
+        <param name="scale_y" value="0.2" type="double"/>
+        <param name="scale_omega" value="0.2" type="double"/>
+    </node>
+
+</launch>
