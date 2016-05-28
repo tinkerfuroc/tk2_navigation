@@ -10,3 +10,9 @@ back_laser:
   theta: 3.141592653589793
   topic: /back_scan
 
+kinect_fake_laser:
+  x: -0.3
+  y: 0.01
+  theta: 0
+  topic: /kinect_fake_laser
+

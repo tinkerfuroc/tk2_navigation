@@ -30,9 +30,9 @@ TinkerTeleop::TinkerTeleop()
 
 void TinkerTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr &joy) {
     geometry_msgs::Twist vel;
-    vel.linear.x = scale_x_ * joy->axes[1];
-    vel.linear.y = scale_y_ * joy->axes[0];
-    vel.angular.z = scale_omega_ * joy->axes[2];
+    vel.linear.x = scale_x_ * joy->axes[3];
+    vel.linear.y = scale_y_ * joy->axes[2];
+    vel.angular.z = scale_omega_ * joy->axes[0];
     vel_pub_.publish(vel);
 }
 

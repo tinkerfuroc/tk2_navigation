@@ -1,9 +1,8 @@
 <launch>
     <include file="$(find tinker_description)/launch/tinker_description.launch"/>
     <include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/>
-    <include file="$(find tinker_2dnav/launch/hokuyo.launch"/>
+    <include file="$(find tinker_laser_fusion)/launch/fusion.launch"/>
 
     <!--node name="rviz" pkg="rviz" type="rviz"/-->
-    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
-    </node>
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen"/>
 </launch>

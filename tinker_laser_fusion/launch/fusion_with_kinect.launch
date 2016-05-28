@@ -1,25 +1,23 @@
 <launch>
-
-    <include file="$(find tinker_description)/launch/tinker_description.launch"/>
-    <include file="$(find tinker_2dnav/launch/hokuyo.launch"/>
-
+    <include file="$(find tinker_machine)/tinker.machine"/>
     <node name="hokuyo_front" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
         <remap from="/scan" to="/front_scan"/>
         <param name="calibrate_time" type="bool" value="false"/> 
-        <param name="port" type="string" value="/dev/ttyACM0"/> 
+        <param name="port" type="string" value="/dev/ttyACM1"/> 
         <param name="intensity" type="bool" value="false"/>
         <param name="min_ang" type="double" value="-2.268"/>
         <param name="max_ang" type="double" value="2.268"/>
     </node>
-    <node name="hokuyo_side" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
-        <remap from="/scan" to="/side_scan"/>
+    <node name="hokuyo_back" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
+        <remap from="/scan" to="/back_scan"/>
         <param name="calibrate_time" type="bool" value="false"/> 
-        <param name="port" type="string" value="/dev/ttyACM1"/> 
+        <param name="port" type="string" value="/dev/ttyACM0"/> 
         <param name="intensity" type="bool" value="false"/>
     </node>
 
+    <node machine="hyperv-linux" name="kinect_laser" pkg="tinker_camera" type="point2scan" respawn="false" />
     <node name="runfusion" type="runfusion.py" pkg="tinker_laser_fusion" output="screen">
-        <param name="real_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/real_laser.yaml"/>
+        <param name="real_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/real_laser_with_kinect.yaml"/>
         <param name="fake_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/fake_laser.yaml"/>
     </node>
 </launch>

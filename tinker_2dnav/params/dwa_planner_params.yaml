@@ -1,9 +1,12 @@
 DWAPlannerROS:
+    acc_lim_x: 10.0
+    acc_lim_y: 10.0
+    acc_lim_th: 10.0
     max_vel_x: 0.15
-    min_vel_x: 0.00
-    max_vel_y: 0.03
-    min_vel_y: -0.03
-    max_rot_vel: 0.10
+    min_vel_x: -0.03
+    max_vel_y: 0.05
+    min_vel_y: -0.05
+    max_rot_vel: 0.2
     min_rot_vel: 0.0
 
     prune_plan: true
@@ -13,8 +16,8 @@ DWAPlannerROS:
     yaw_goal_tolerance: 0.1
     xy_goal_tolerance: 0.1
 
-    occdist_scale: 0.1
+    occdist_scale: 5.0 
     penalize_negative_x: true
 
-    path_distance_bias: 32.0
-    goal_distance_bias: 24.0
+    path_distance_bias: 6.0
+
