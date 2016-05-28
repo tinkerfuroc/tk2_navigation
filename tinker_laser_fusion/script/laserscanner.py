@@ -1,6 +1,7 @@
 import rospy
 from threading import Lock
-from numpy import inf, nan, isnan
+from numpy import inf, nan, isnan, fabs
+import numpy as np
 from math import sin, cos, sqrt, acos, floor, pi
 from sensor_msgs.msg import LaserScan
 from copy import copy
@@ -16,7 +17,9 @@ class LaserScanner:
         self.x = local_laser_param['x']
         self.y = local_laser_param['y']
         self.theta = local_laser_param['theta']
-        self.range_data = [inf] * self.len_fake_data
+        self.is_real_time = local_laser_param['is_real_time']
+        self.need_filter = local_laser_param['need_filter']
+        self.range_data = np.array([inf] * self.len_fake_data)
         self.lock = Lock()
         rospy.Subscriber(local_laser_param['topic'], LaserScan, self.laser_data_callback)
 
@@ -38,10 +41,23 @@ class LaserScanner:
             fake_angle = -fake_angle
         return fake_radius, fake_angle
 
+    def filtered_val(self, val, neighbours):
+        if val > 20:
+            return inf
+        near_cnt = sum(fabs(neighbours - val) < 0.3)
+        if near_cnt < len(neighbours) * 0.7:
+            return inf
+        return val
+
+    def filter_range(self, range_data):
+        filtered_ranges = np.array([inf] * self.len_fake_data)
+        for i in xrange(10, self.len_fake_data - 10):
+            filtered_ranges[i] = self.filtered_val(range_data[i], range_data[i-5:i+5])
+        return filtered_ranges
 
     def laser_data_callback(self, laser_scan):
         with self.lock:
-            self.range_data = [inf] * self.len_fake_data
+            self.range_data = np.array([inf] * self.len_fake_data)
             angle_step = laser_scan.angle_increment
             angle = laser_scan.angle_min
             for radius in laser_scan.ranges:
@@ -53,5 +69,6 @@ class LaserScanner:
                     if self.range_data[i] == nan or self.range_data[i] > fake_radius:
                         self.range_data[i] = fake_radius
                 angle += angle_step
-
+            if self.need_filter:
+                self.range_data = self.filter_range(self.range_data)
 

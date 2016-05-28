@@ -3,16 +3,22 @@ front_laser:
   y: 0
   theta: 0
   topic: /front_scan 
+  is_real_time: False
+  need_filter: False
 
 back_laser:
   x: -0.6
   y: -0.03
   theta: 3.141592653589793
   topic: /back_scan
+  is_real_time: False
+  need_filter: False
 
 kinect_fake_laser:
   x: -0.3
   y: 0.01
   theta: 0
   topic: /kinect_fake_laser
+  is_real_time: True
+  need_filter: True
 

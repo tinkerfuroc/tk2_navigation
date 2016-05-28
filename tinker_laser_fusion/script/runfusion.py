@@ -7,10 +7,12 @@ from laserscanner import LaserScanner
 from sensor_msgs.msg import LaserScan
 from numpy import nan
 from threading import Thread
+import numpy as np
 
 RATE = 40.
 
-def checker(fake_laser_param, laser_scanners):
+
+def checker(fake_laser_param, realtime_lasers, nonrealtime_lasers):
     r = rospy.Rate(RATE)
     seq = 0
     laser_scan = LaserScan()
@@ -25,10 +27,13 @@ def checker(fake_laser_param, laser_scanners):
     laser_scan.time_increment = 0
     pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
     while not rospy.is_shutdown():
-        fake_laser_data = laser_scanners[0].get_range_data()
-        for laser_scanner in laser_scanners[1:]:
+        fake_laser_data = realtime_lasers[0].get_range_data()
+        for laser_scanner in realtime_lasers[1:]:
             new_laser_data = laser_scanner.get_range_data()
             fake_laser_data = [min(r1, r2) for r1, r2 in zip(fake_laser_data, new_laser_data)]
+        for laser_scanner in nonrealtime_lasers:
+            laser_data = laser_scanner.get_range_data()
+            fake_laser_data = [r1 if r1 < 1000 else min(r1, r2) for r1, r2 in zip(fake_laser_data, laser_data)]
         laser_scan.ranges = fake_laser_data
         laser_scan.header.stamp = rospy.Time.now()
         pub.publish(laser_scan)
@@ -44,7 +49,9 @@ def init(argv):
         laser_param = yaml.load(f.read())
     laser_scanners =  [LaserScanner(name, laser_param, fake_laser_param) \
             for name, laser_param in laser_param.iteritems()]
-    checker(fake_laser_param, laser_scanners)
+    realtime_lasers = [scanner for scanner in laser_scanners if scanner.is_real_time]
+    nonrealtime_lasers = [scanner for scanner in laser_scanners if not scanner.is_real_time]
+    checker(fake_laser_param, realtime_lasers, nonrealtime_lasers)
 
 
 if __name__ == '__main__':
