@@ -33,7 +33,8 @@ def checker(fake_laser_param, realtime_lasers, nonrealtime_lasers):
             fake_laser_data = [min(r1, r2) for r1, r2 in zip(fake_laser_data, new_laser_data)]
         for laser_scanner in nonrealtime_lasers:
             laser_data = laser_scanner.get_range_data()
-            fake_laser_data = [r1 if r1 < 1000 else min(r1, r2) for r1, r2 in zip(fake_laser_data, laser_data)]
+            #fake_laser_data = [r1 if r1 < 1000 else min(r1, r2) for r1, r2 in zip(fake_laser_data, laser_data)]
+            fake_laser_data = [min(r1, r2) for r1, r2 in zip(fake_laser_data, laser_data)]
         laser_scan.ranges = fake_laser_data
         laser_scan.header.stamp = rospy.Time.now()
         pub.publish(laser_scan)

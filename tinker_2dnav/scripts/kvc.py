@@ -80,6 +80,7 @@ if __name__=="__main__":
             elif key == 'c':
                 target.angular.z = -V_A
             elif key == 'q':
+                pub.publish(target)
                 break
             else:
                 target.linear.x = target.linear.y = target.angular.z = 0

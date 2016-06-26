@@ -18,6 +18,8 @@
         <param name="GlobalPlanner/orientation_mode" value="2" />
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
         <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+        <param name="oscillation_timeout" value="10.0" />
+        <param name="recovery_behavior_enabled" value="False" />
         <rosparam file="$(find tinker_2dnav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
         <rosparam file="$(find tinker_2dnav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
         <rosparam file="$(find tinker_2dnav)/params/local_costmap_params.yaml" command="load" />

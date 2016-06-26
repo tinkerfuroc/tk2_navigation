@@ -1,9 +1,7 @@
 <launch>
-
-    <include file="$(find k2_client)/launch/k2_client.launch" />
     <include file="$(find tinker_description)/launch/tinker_description.launch"/>
     <include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/>
-    <include file="$(find tinker_laser_fusion)/launch/fusion_with_kinect.launch"/>
+    <include file="$(find tinker_laser_fusion)/launch/fusion.launch"/>
     <!--include file="$(find tinker_2dnav/launch/map_server.launch"/-->
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen"/>
 

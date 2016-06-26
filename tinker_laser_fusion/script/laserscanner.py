@@ -20,6 +20,12 @@ class LaserScanner:
         self.is_real_time = local_laser_param['is_real_time']
         self.need_filter = local_laser_param['need_filter']
         self.range_data = np.array([inf] * self.len_fake_data)
+        self.angle_limited = 'angle_min' in local_laser_param
+        if self.angle_limited:
+            self.angle_min = local_laser_param['angle_min']
+            self.angle_max = local_laser_param['angle_max']
+        if 'reverse' in local_laser_param:
+            self.reverse = local_laser_param['reverse']
         self.lock = Lock()
         rospy.Subscriber(local_laser_param['topic'], LaserScan, self.laser_data_callback)
 
@@ -32,7 +38,8 @@ class LaserScanner:
         with self.lock:
             return self.timestamp
 
-    def get_fake_polar(self, real_angle, real_radius):
+    def get_fake_polar(self, real_angle, real_radius, reverse):
+        real_angle = pi - real_angle if reverse else real_angle
         fake_x = cos(real_angle) * real_radius + self.x
         fake_y = sin(real_angle) * real_radius + self.y
         fake_radius = sqrt(fake_x * fake_x + fake_y * fake_y)
@@ -44,8 +51,8 @@ class LaserScanner:
     def filtered_val(self, val, neighbours):
         if val > 20:
             return inf
-        near_cnt = sum(fabs(neighbours - val) < 0.3)
-        if near_cnt < len(neighbours) * 0.7:
+        near_cnt = sum(fabs(neighbours - val) < 0.1)
+        if near_cnt < len(neighbours) * 0.5:
             return inf
         return val
 
@@ -60,11 +67,16 @@ class LaserScanner:
             self.range_data = np.array([inf] * self.len_fake_data)
             angle_step = laser_scan.angle_increment
             angle = laser_scan.angle_min
+            if self.angle_limited:
+                start_i = (int)((self.angle_min - laser_scan.angle_min) / angle_step)
+                end_i = (int)((self.angle_max - laser_scan.angle_min) / angle_step)
+                laser_scan.ranges = laser_scan.ranges[start_i:end_i]
+                angle = self.angle_min
             for radius in laser_scan.ranges:
                 if not isnan(radius) and radius != inf:
-                    fake_radius, fake_angle = self.get_fake_polar(angle + self.theta, radius)
+                    fake_radius, fake_angle = self.get_fake_polar(angle + self.theta, radius, self.reverse)
                     i = (fake_angle - self.min_fake_angle) / self.fake_angle_step
-                    i = int(floor(i + 0.5))
+                    i = int(round(i))
                     i %= self.len_fake_data
                     if self.range_data[i] == nan or self.range_data[i] > fake_radius:
                         self.range_data[i] = fake_radius
