@@ -75,6 +75,8 @@ class LaserScanner:
             for radius in laser_scan.ranges:
                 if not isnan(radius) and radius != inf:
                     fake_radius, fake_angle = self.get_fake_polar(angle + self.theta, radius, self.reverse)
+                    if np.isnan(fake_angle):
+                        continue
                     i = (fake_angle - self.min_fake_angle) / self.fake_angle_step
                     i = int(round(i))
                     i %= self.len_fake_data
