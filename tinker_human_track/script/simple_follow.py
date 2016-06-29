@@ -68,6 +68,7 @@ class Follower:
 
     def preempt_cb(self):
         self.follow_server.set_preempted()
+        self.is_following = False
 
 
 def init(argv):
