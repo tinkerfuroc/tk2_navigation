@@ -1,10 +1,13 @@
 <launch>
+    <arg name="map_file" default="$(find tinker_2dnav)/map/test_place.yaml"/>    
 
     <include file="$(find tinker_description)/launch/tinker_description.launch"/>
     <include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/>
     <include file="$(find tinker_laser_fusion)/launch/fusion_with_kinect.launch"/>
-    <include file="$(find tinker_2dnav)/launch/map_server.launch"/>
-    <include file="$(find k2_client)/launch/k2_client.launch" />
+    <include file="$(find tinker_2dnav)/launch/map_server.launch">
+        <arg name="map_file" value="$(arg map_file)"/>
+    </include>
+    <include file="$(find k2_client)/launch/k2_client.launch"/>
 
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz">
         <remap from="/cmd_vel" to="/do_nothing"/>
@@ -12,7 +15,7 @@
 
     <include file="$(find amcl)/examples/amcl_omni.launch"/>
 
-    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base">
         <param name="controller_frequency" value="10.0" />
         <param name="planner_patience" value="20.0" />
         <param name="GlobalPlanner/orientation_mode" value="2" />

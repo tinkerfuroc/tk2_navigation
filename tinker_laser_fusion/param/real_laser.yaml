@@ -1,5 +1,5 @@
 front_laser:
-  x: 0.3
+  x: 0
   y: 0
   theta: 0
   topic: /front_scan 
@@ -8,7 +8,7 @@ front_laser:
   reverse: False
 
 low_laser:
-  x: 0.3
+  x: 0
   y: 0.0
   theta: 3.141592653589793
   topic: /low_scan

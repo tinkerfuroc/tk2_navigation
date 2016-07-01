@@ -19,10 +19,11 @@ low_laser:
   angle_max: 1.05
 
 kinect_fake_laser:
-  x: -0.3
+  x: 0
   y: 0.01
   theta: 0
   topic: /kinect_fake_laser
   is_real_time: False
+  reverse: False
   need_filter: True
 

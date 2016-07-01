@@ -20,8 +20,8 @@ LaserHumanTracker::LaserHumanTracker()
     private_nh.param("max_segment_size", max_segment_size_, 80.0);
     private_nh.param("min_segment_distance", min_segment_distance_, 0.05);
     private_nh.param("max_segment_distance", max_segment_distance_, 0.25);
-    private_nh.param("min_toward_weight", min_toward_weight_, 0.7);
-    private_nh.param("min_inscribe_angle", min_inscribe_angle_, 0.4);
+    private_nh.param("min_toward_weight", min_toward_weight_, 0.6);
+    private_nh.param("min_inscribe_angle", min_inscribe_angle_, 0.2);
     private_nh.param("max_inscribe_angle", max_inscribe_angle_, 3.0);
     private_nh.param("max_leg_distance", max_leg_distance_, 0.7);
     people_pub_ = private_nh.advertise<people_msgs::People>("laser_found_people", 1);
