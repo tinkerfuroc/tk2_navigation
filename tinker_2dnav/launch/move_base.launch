@@ -1,17 +1,18 @@
 <launch>
-    <arg name="map_file" default="$(find tinker_2dnav)/map/test_place.yaml"/>    
+    <arg name="map_file" default="$(find tinker_2dnav)/map/1_3floor.yaml"/>    
 
     <include file="$(find tinker_description)/launch/tinker_description.launch"/>
     <include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/>
-    <include file="$(find tinker_laser_fusion)/launch/fusion_with_kinect.launch"/>
+    <include file="$(find tinker_laser_fusion)/launch/fusion.launch"/>
     <include file="$(find tinker_2dnav)/launch/map_server.launch">
         <arg name="map_file" value="$(arg map_file)"/>
     </include>
-    <include file="$(find k2_client)/launch/k2_client.launch"/>
+    <!--include file="$(find k2_client)/launch/k2_client.launch"/-->
+    <include file="$(find tinker_camera)/launch/tk_front_primesense.launch"/>
 
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz">
+    <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(find tinker_2dnav)/launch/rviz_config.rviz">
         <remap from="/cmd_vel" to="/do_nothing"/>
-    </node>
+    </node-->
 
     <include file="$(find amcl)/examples/amcl_omni.launch"/>
 
@@ -23,8 +24,8 @@
         <param name="base_global_planner" value="global_planner/GlobalPlanner" />
         <param name="oscillation_timeout" value="10.0" />
         <param name="recovery_behavior_enabled" value="False" />
-        <rosparam file="$(find tinker_2dnav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find tinker_2dnav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <!--rosparam file="$(find tinker_2dnav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" /-->
+        <!--rosparam file="$(find tinker_2dnav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" /-->
         <rosparam file="$(find tinker_2dnav)/params/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find tinker_2dnav)/params/global_costmap_params.yaml" command="load" />
         <rosparam file="$(find tinker_2dnav)/params/dwa_planner_params.yaml" command="load" />

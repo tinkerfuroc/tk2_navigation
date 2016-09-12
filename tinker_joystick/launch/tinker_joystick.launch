@@ -1,5 +1,5 @@
 <launch>
-    <!--include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/-->
+    <include file="$(find tk_hardware_interface)/launch/odom_zynq_control.launch"/>
     <node pkg="joy" type="joy_node" name="turtle_joy">
         <param name="dev" type="string" value="/dev/input/js0"/>
         <param name="deadzone" value="0.05"/>

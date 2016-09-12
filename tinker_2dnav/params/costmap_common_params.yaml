@@ -4,8 +4,32 @@ footprint: [[0.35, 0.25], [-0.35, 0.25], [-0.35, -0.25], [0.35, -0.25]]
 #robot_radius: ir_of_robot
 inflation_radius: 0.3
 
-observation_sources: laser_scan_sensor #point_cloud_sensor
+#plugins: 
+#    #- {name: static_map,  type: "costmap_2d::StaticLayer"}
+#    - {name: laser_scan_sensor,   type: "costmap_2d::ObstacleLayer"}
+#    #- {name: front_primesense_obstacle,   type: "costmap_2d::VoxelLayer"}
+#
+#laser_scan_sensor:
+#    observation_sources: laser_scan_sensor
+#    laser_scan_sensor: {data_type: LaserScan, sensor_frame: base_laser_link, clearing: true, marking: true, topic: /scan}
+#
+#front_primesense_obstacle:
+#    observation_sources: front_primesense
+#    front_primesense: {data_type: PointCloud2, 
+#                       sensor_frame: primesense_front_depth_optical_frame, 
+#                       clearing: true, marking: true, 
+#                       topic: /primesense_front/depth/points,
+#                       min_obstacle_height: 0.02, 
+#                       max_obstacle_height: 1.30} 
 
-laser_scan_sensor: {sensor_frame: base_laser_link, data_type: LaserScan, topic: scan, marking: true, clearing: true}
-
-#point_cloud_sensor: {sensor_frame: laser, data_type: PointCloud, topic: cloud, marking: true, clearing: true}
+observation_sources: laser_scan_sensor
+#observation_sources: laser_scan_sensor point_cloud_sensor
+#
+laser_scan_sensor: {data_type: LaserScan, sensor_frame: base_laser_link, clearing: true, marking: true, topic: /scan}
+#
+#point_cloud_sensor: {data_type: PointCloud2, 
+#                     sensor_frame: primesense_front_depth_optical_frame, 
+#                     clearing: true, marking: true, 
+#                     topic: /primesense_front/depth/points,
+#                     min_obstacle_height: 0.02, 
+#                     max_obstacle_height: 1.30} 

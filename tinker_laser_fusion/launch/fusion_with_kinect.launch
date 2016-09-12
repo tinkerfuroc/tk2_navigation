@@ -1,14 +1,15 @@
 <launch>
-    <include file="$(find tinker_machine)/tinker.machine"/>
+    <!--include file="$(find tinker_machine)/tinker.machine"/-->
     <node name="hokuyo_front" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
-        <remap from="/scan" to="/front_scan"/>
+        <!--remap from="/scan" to="/front_scan"/-->
         <param name="calibrate_time" type="bool" value="false"/> 
         <param name="port" type="string" value="/dev/ttyACM0"/> 
         <param name="intensity" type="bool" value="false"/>
         <param name="min_ang" type="double" value="-2.268"/>
         <param name="max_ang" type="double" value="2.268"/>
+        <param name="frame_id" type="string" value="base_laser_link"/>
     </node>
-    <node name="hokuyo_low" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
+    <!--node name="hokuyo_low" pkg="hokuyo_node" type="hokuyo_node" respawn="false" output="screen">
         <remap from="/scan" to="/low_scan"/>
         <param name="calibrate_time" type="bool" value="false"/> 
         <param name="port" type="string" value="/dev/ttyACM1"/> 
@@ -21,5 +22,5 @@
     <node name="runfusion" type="runfusion.py" pkg="tinker_laser_fusion" output="screen">
         <param name="real_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/real_laser_with_kinect.yaml"/>
         <param name="fake_laser_param_file" type="string" value="$(find tinker_laser_fusion)/param/fake_laser.yaml"/>
-    </node>
+    </node-->
 </launch>
