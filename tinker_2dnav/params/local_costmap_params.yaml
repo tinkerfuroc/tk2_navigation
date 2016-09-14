@@ -18,7 +18,7 @@ local_costmap:
 
     plugins: 
         - {name: laser_scan_sensor,   type: "costmap_2d::ObstacleLayer"}
-        #- {name: front_primesense_obstacle,   type: "costmap_2d::VoxelLayer"}
+        - {name: front_primesense_obstacle,   type: "costmap_2d::VoxelLayer"}
         - {name: local_inflation, type: "costmap_2d::InflationLayer"}
     
     laser_scan_sensor:
@@ -31,7 +31,7 @@ local_costmap:
                            sensor_frame: primesense_front_depth_optical_frame, 
                            clearing: true, marking: true, 
                            topic: /primesense_front/depth/points,
-                           min_obstacle_height: 0.02, 
+                           min_obstacle_height: 0.03, 
                            max_obstacle_height: 1.30} 
 
     local_inflation:
